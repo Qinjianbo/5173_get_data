@@ -1,12 +1,20 @@
 <?php
 namespace App\Models;
 
+use App\DB;
+
 class Model
 {
     // 模型的table名
     protected $tableName = '';
     // 数据库
     protected $db = null;
+
+    // 构造函数
+    public function __construct()
+    {
+        $this->db = new DB();
+    }
 
     /**
      * 指定tabel
