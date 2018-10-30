@@ -1,0 +1,8 @@
+<?php
+
+$database['5173Data'] = [
+    'host' => 'localhost',
+    'user' => 'root',
+    'pass' => '123456',
+    'db' => '5173_data',
+];

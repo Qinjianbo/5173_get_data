@@ -1,5 +1,6 @@
 <?php
-require('./dbConfig.php');
+namespace App;
+require('../config/dbConfig.php');
 
 class DB
 {
@@ -10,7 +11,6 @@ class DB
      * 获取指定数据库连接
      *
      * @param $configName 配置名称
-     * @return $connection 数据库连接
      * @throw \Exception
      */
     public function getConnection(string $configName)
@@ -24,12 +24,10 @@ class DB
             throw new \Exception('Can not get config info!');
         }
 
-        $this->connection = mysqli_connect($host, $user, $pwd, $db);
+        $this->connection = mysqli_connect($config['host'], $config['user'], $config['pass'], $config['db']);
         if (!$this->connection) {
             throw new \Exception(mysqli_connect_error(), mysqli_connect_errno());
         }
-
-        return $this->connection
     }
 
     /**
