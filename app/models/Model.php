@@ -39,4 +39,15 @@ class Model
     {
         return $this->tableName;
     }
+
+    /**
+     * 析构函数
+     */
+    public function __destruct()
+    {
+        // 在对象销毁时关闭数据库连接
+        if ($this->db) {
+            $this->db->closeConnection();
+        }
+    }
 }

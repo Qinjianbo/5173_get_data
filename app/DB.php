@@ -1,6 +1,6 @@
 <?php
 namespace App;
-require('../config/dbConfig.php');
+require(dirname(dirname(__FILE__)).'/config/dbConfig.php');
 
 class DB
 {
@@ -8,18 +8,13 @@ class DB
     public $connection = null;
 
     /**
-     * 获取指定数据库连接
+     * 设置指定数据库连接
      *
-     * @param $configName 配置名称
+     * @param $config 配置信息
      * @throw \Exception
      */
-    public function getConnection(string $configName)
+    public function setConnection(array $config)
     {
-        if (!$configName) {
-            throw new \Exception('ConfigName can not be empty string!');
-        }
-
-        $config = $database[$configName] ?? '';
         if (empty($config)) {
             throw new \Exception('Can not get config info!');
         }
@@ -36,7 +31,7 @@ class DB
      * @param string $charset 编码方式
      * @throw \Exception
      */
-    public function setDbCharset(string $charset = 'utf-8')
+    public function setCharset(string $charset = 'utf-8')
     {
         if (!$charset) {
             throw new \Exception('Charset can not be empty string!');
@@ -55,5 +50,16 @@ class DB
         if ($this->connection) {
             $this->connection->close();
         }
+    }
+
+    /**
+     * 获取数据库连接
+     *
+     * @return
+     */
+    public function getConnection()
+    {
+        $this->setCharset();
+        return $this->connection;
     }
 }

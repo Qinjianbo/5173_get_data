@@ -70,7 +70,7 @@ class GetHistory
             $data['gameArea'] = trim(str_replace('游戏/区/服/阵营：奇迹MU/', '', $data['gameArea']));
             $data['type'] = $items[1]->find('li', 0)->plaintext;
             $data['price'] = $items[2]->find('li', 0)->plaintext;
-            $data['price'] = str_replace(',', '', trim(str_replace('元', '', $data['price'])));
+            $data['price'] = floatval(str_replace(',', '', trim(str_replace('元', '', $data['price']))));
             $data['dealTime'] = $items[4]->find('li', 0)->plaintext;
             $products[] = $data;
         }

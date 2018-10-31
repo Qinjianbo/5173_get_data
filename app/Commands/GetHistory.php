@@ -1,7 +1,8 @@
 <?php
-require("./vendor/autoload.php");
+require(dirname(dirname(dirname(__FILE__))).'/vendor/autoload.php');
 
 use App\Service\GetHistory;
+use App\Models\MuDealHistoryModel;
 
 // 发送请求
 echo 'start...', PHP_EOL;
@@ -47,50 +48,15 @@ while(1) {
 echo '共获取到数据条数:', count($allProducts), PHP_EOL;
 //die('调试结束');
 
-echo '连接数据库...', PHP_EOL;
-// 连接数据库，将数据存入数据库
-$link = mysqli_connect($host, $user, $pass, $dbName);
-if (!$link) {
-    echo 'Error: Unable to connect to MySQL.', PHP_EOL;
-    echo 'Debugging errno:', mysqli_connect_errno(), PHP_EOL;
-    echo 'Debugging error:', mysqli_connect_error(), PHP_EOL;
-}
-$link->set_charset('utf8');
-echo '数据库已连接...', PHP_EOL;
-
-try {
-    echo '开始像数据库写入数据...', PHP_EOL;
-    $successCount = 0;
-    foreach ($allProducts as $product) {
-        $bool = $stmt = mysqli_prepare(
-            $link,
-            "INSERT INTO muDealHistory (name, type, price, dealTime, gameArea, link) VALUES(?, ?, ? ,? , ?, ?)"
-        );
-        if (!$bool) {
-            die('stmt failed');
-        }
-        mysqli_stmt_bind_param(
-            $stmt,
-            'ssdsss',
-            $product['name'],
-            $product['type'],
-            $product['price'],
-            $product['dealTime'],
-            $product['gameArea'],
-            $product['link']
-        );
-        mysqli_stmt_execute($stmt);
-        if (mysqli_stmt_affected_rows($stmt)) {
-            $successCount++;
-        }
-        mysqli_stmt_close($stmt);
-        usleep(10);
+echo PHP_EOL;
+echo '开始向数据库写入数据...', PHP_EOL;
+$muDealHistoryModel = new MuDealHistoryModel();
+$successCount = 0;
+foreach ($allProducts as $product) {
+    if($muDealHistoryModel->insert($product)) {
+        $successCount++;
     }
-    echo '成功插入数据条数:', $successCount, PHP_EOL;
-    $link->close();
-    echo '数据库连接已关闭...', PHP_EOL;
-} catch (\Exception $e) {
-    $link_close();
-    echo 'error:', $e->getMessage(), PHP_EOL;
+    usleep(10);
 }
+echo '成功插入数据条数:', $successCount, PHP_EOL;
 echo 'end...';
