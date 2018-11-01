@@ -52,6 +52,7 @@ echo PHP_EOL;
 echo '开始向数据库写入数据...', PHP_EOL;
 $muDealHistoryModel = new MuDealHistoryModel();
 $successCount = 0;
+$allProducts = array_reverse($allProducts);
 foreach ($allProducts as $product) {
     if($muDealHistoryModel->insert($product)) {
         $successCount++;
