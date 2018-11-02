@@ -88,6 +88,7 @@ function writeToDatabase($allProducts) {
     $successCount = 0;
     $allProducts = array_reverse($allProducts);
     foreach ($allProducts as $product) {
+        $product['created_at'] = date('Y-m-d H:i:s', time());
         if($muDealHistoryModel->insert($product)) {
             $successCount++;
         } else {
