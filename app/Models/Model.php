@@ -48,6 +48,7 @@ class Model
         // 在对象销毁时关闭数据库连接
         if ($this->db) {
             $this->db->closeConnection();
+            echo '数据库连接已关闭', PHP_EOL;
         }
     }
 }
