@@ -30,7 +30,8 @@ class MuDealHistoryModel extends BaseModel
             implode(',', $fields),
             implode(',', array_fill(0, count($fields), '?'))
         );
-        $stmt = mysqli_prepare($this->db->getConnection(), $sql);
+        $connection = $this->db->getConnection();
+        $stmt = mysqli_prepare($connection, $sql);
         if (!$stmt) {
             throw new \Exception('Prepare sql error');
         }
@@ -51,6 +52,10 @@ class MuDealHistoryModel extends BaseModel
         call_user_func_array('mysqli_stmt_bind_param', $args);
         mysqli_stmt_execute($stmt);
         $affectedRows = mysqli_stmt_affected_rows($stmt);
+        if ($connection->errno) {
+            echo 'Error:', $connection->error, PHP_EOL;
+            return 0;
+        }
         mysqli_stmt_close($stmt);
 
         return $affectedRows;
