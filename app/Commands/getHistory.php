@@ -107,4 +107,4 @@ function writeToDatabase($allProducts, $failFile) {
 
     return $successCount;
 }
-echo 'end...';
+echo 'end...', PHP_EOL;
