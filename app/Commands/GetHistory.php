@@ -1,5 +1,6 @@
 <?php
 require(dirname(dirname(dirname(__FILE__))).'/vendor/autoload.php');
+require(dirname(dirname(dirname(__FILE__))).'/config/dbConfig.php');
 
 use App\Service\GetHistory;
 use App\Models\MuDealHistoryModel;
@@ -24,11 +25,8 @@ $params = [
 ];
 $service = new GetHistory();
 $service->setUrl($url);
-$client = new \Predis\Client([
-    'host' => '127.0.0.1',
-    'port' => '6379',
-    'password' => '123456'
-]);
+$redisConfig = $redis['5173Data'];
+$client = new \Predis\Client($redisConfig);
 while(1) {
     echo '当前请求数据页数:', $page, PHP_EOL;
     $params['pg'] = $page;
