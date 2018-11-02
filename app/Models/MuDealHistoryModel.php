@@ -55,4 +55,23 @@ class MuDealHistoryModel extends BaseModel
 
         return $affectedRows;
     }
+
+    /**
+     * 获取最新更新交易时间
+     *
+     * @return string
+     */
+    public function getLastDealTime() : string
+    {
+        $sql = 'SELECT dealTime FROM '.$this->getTableName().' ORDER BY dealTime DESC LIMIT 1';
+        $connection = $this->db->getConnection();
+        if ($result = $connection->query($sql)) {
+            if($row = $result->fetch_assoc()) {
+                return $row['dealTime'] ?? '';
+            }
+        } else {
+            echo '时间查询出错', PHP_EOL;
+            return '';
+        }
+    }
 }
