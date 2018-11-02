@@ -64,7 +64,7 @@ while(1) {
 echo '共获取到数据条数:', count($allProducts), PHP_EOL;
 //die('调试结束');
 
-$failFile = sprintf('fail%s.csv', date('Ymd', time());
+$failFile = sprintf('fail%s.csv', date('Ymd', time()));
 if ($allProducts) {
     $successCount = writeToDatabase($allProducts, $failFile);
     if (count($allProducts) != $successCount) {
@@ -95,11 +95,11 @@ function writeToDatabase($allProducts, $failFile) {
             if($muDealHistoryModel->insert($product)) {
                 $successCount++;
             } else {
-                file_put_contents($failFail, implode(',', $product).PHP_EOL, FILE_APPEND);
+                file_put_contents($failFile, implode(',', $product).PHP_EOL, FILE_APPEND);
             }
         } catch(\Exception $e) {
             echo 'error:', $e->getMessage(), PHP_EOL;
-            file_put_contents($failFail, implode(',', $product).PHP_EOL, FILE_APPEND);
+            file_put_contents($failFile, implode(',', $product).PHP_EOL, FILE_APPEND);
         }
         usleep(10);
     }
