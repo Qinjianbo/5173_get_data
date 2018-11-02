@@ -64,10 +64,11 @@ while(1) {
 echo '共获取到数据条数:', count($allProducts), PHP_EOL;
 //die('调试结束');
 
+$failFile = sprintf('fail%s.csv', date('Ymd', time());
 if ($allProducts) {
-    $successCount = writeToDatabase($allProducts);
+    $successCount = writeToDatabase($allProducts, $failFile);
     if (count($allProducts) != $successCount) {
-        echo '有写入失败的数据,请查看fail.csv', PHP_EOL;
+        echo "有写入失败的数据,请查看{$failFile}", PHP_EOL;
     }
     $lastDealTime = $allProducts[0]['dealTime'];
     $client->set('lastDealTime', $lastDealTime);
@@ -82,7 +83,7 @@ if ($allProducts) {
  *
  * @return int
  */
-function writeToDatabase($allProducts) {
+function writeToDatabase($allProducts, $failFile) {
     echo PHP_EOL;
     echo '开始向数据库写入数据...', PHP_EOL;
     $muDealHistoryModel = new MuDealHistoryModel();
@@ -94,11 +95,11 @@ function writeToDatabase($allProducts) {
             if($muDealHistoryModel->insert($product)) {
                 $successCount++;
             } else {
-                file_put_contents('./fail.csv', implode(',', $product).PHP_EOL, FILE_APPEND);
+                file_put_contents($failFail, implode(',', $product).PHP_EOL, FILE_APPEND);
             }
         } catch(\Exception $e) {
             echo 'error:', $e->getMessage(), PHP_EOL;
-            file_put_contents('./fail.csv', implode(',', $product).PHP_EOL, FILE_APPEND);
+            file_put_contents($failFail, implode(',', $product).PHP_EOL, FILE_APPEND);
         }
         usleep(10);
     }
