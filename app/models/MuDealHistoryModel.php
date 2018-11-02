@@ -44,7 +44,6 @@ class MuDealHistoryModel extends BaseModel
                 $types .= 's';
             }
         }
-        echo 'types:', $types, PHP_EOL;
         $args = [$stmt, $types];
         foreach ($data as $key => $value) {
             $args[] = &$data[$key];

@@ -1,4 +1,5 @@
 <?php
+namespace App\Commands;
 require(dirname(dirname(dirname(__FILE__))).'/vendor/autoload.php');
 require(dirname(dirname(dirname(__FILE__))).'/config/dbConfig.php');
 
@@ -89,9 +90,14 @@ function writeToDatabase($allProducts) {
     $allProducts = array_reverse($allProducts);
     foreach ($allProducts as $product) {
         $product['created_at'] = date('Y-m-d H:i:s', time());
-        if($muDealHistoryModel->insert($product)) {
-            $successCount++;
-        } else {
+        try {
+            if($muDealHistoryModel->insert($product)) {
+                $successCount++;
+            } else {
+                file_put_contents('./fail.csv', implode(',', $product).PHP_EOL, FILE_APPEND);
+            }
+        } catch(\Exception $e) {
+            echo 'error:', $e->getMessage(), PHP_EOL;
             file_put_contents('./fail.csv', implode(',', $product).PHP_EOL, FILE_APPEND);
         }
         usleep(10);
@@ -100,5 +106,4 @@ function writeToDatabase($allProducts) {
 
     return $successCount;
 }
-
 echo 'end...';
