@@ -108,8 +108,8 @@ class MuDealHistoryModel extends BaseModel
                 echo 'ExecuteError:', ($prepare->errorInfo())[2], PHP_EOL;
             }
             $connection->commit();
-            $lastInsertId = $connection->lastInsertId();
-            if (!$lastInsertId) {
+            $rowCount = $prepare->rowCount();
+            if (!$rowCount) {
                 return 0;
             }
         } catch(PDOException $e) {
