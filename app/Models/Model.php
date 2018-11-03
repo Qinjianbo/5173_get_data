@@ -11,9 +11,13 @@ class Model
     protected $db = null;
 
     // 构造函数
-    public function __construct()
+    public function __construct($connectionType)
     {
-        $this->db = new DB();
+        if ($connectionType == 'mysqli') {
+            $this->db = new DB();
+        } else ($connectionType == 'pdo') {
+            $this->db = new Pdo();
+        }
     }
 
     /**
