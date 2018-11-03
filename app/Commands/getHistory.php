@@ -86,13 +86,15 @@ if ($allProducts) {
 function writeToDatabase($allProducts, $failFile) {
     echo PHP_EOL;
     echo '开始向数据库写入数据...', PHP_EOL;
-    $muDealHistoryModel = new MuDealHistoryModel();
+    $muDealHistoryModel = new MuDealHistoryModel('pdo');
+    //$muDealHistoryModel = new MuDealHistoryModel();
     $successCount = 0;
     $allProducts = array_reverse($allProducts);
     foreach ($allProducts as $product) {
         $product['created_at'] = date('Y-m-d H:i:s', time());
         try {
-            if($muDealHistoryModel->insert($product)) {
+            //if($muDealHistoryModel->insert($product)) {
+            if($muDealHistoryModel->insertByPdoWay($product)) {
                 $successCount++;
             } else {
                 file_put_contents($failFile, implode(',', $product).PHP_EOL, FILE_APPEND);

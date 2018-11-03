@@ -6,9 +6,9 @@ use App\Models\Model as BaseModel;
 class MuDealHistoryModel extends BaseModel
 {
     // 构造函数
-    public function __construct()
+    public function __construct($connectionType = 'mysqli')
     {
-        parent::__construct();
+        parent::__construct($connectionType);
         require(dirname(dirname(dirname(__FILE__))).'/config/dbConfig.php');
         $this->db->setConnection($database['5173Data']);
         $this->setTableName('muDealHistory');
@@ -80,5 +80,48 @@ class MuDealHistoryModel extends BaseModel
             echo '时间查询出错', PHP_EOL;
             return '';
         }
+    }
+
+    /**
+     * 通过Pdo的方式插入数据
+     *
+     * @param $data 要插入的数据
+     * @return int
+     */
+    public function insertByPdoWay(array $data)
+    {
+        $sql = sprintf(
+            'INSERT INTO %s (%s) VALUES(%s)',
+            $this->tableName,
+            implode(',', array_keys($data)),
+            implode(',', array_fill(0, count($data), '?'))
+        );
+        $connection = $this->db->getConnection();
+        $prepare = $connection->prepare($sql);
+        if ($connection->errorCode() != '00000') {
+            echo 'PrepareError:', ($connection->errorInfo())[2], PHP_EOL;
+        }
+        try {
+            $connection->beginTransaction();
+            $prepare->execute(array_values($data));
+            if ($prepare->errorCode() != '00000') {
+                echo 'ExecuteError:', ($prepare->errorInfo())[2], PHP_EOL;
+            }
+            $connection->commit();
+            $lastInsertId = $connection->lastInsertId();
+            if (!$lastInsertId) {
+                return 0;
+            }
+        } catch(PDOException $e) {
+            $connection->rollback();
+            echo 'Error:', $e->getMessage(), PHP_EOL;
+            return 0;
+        } catch (Exception $e) {
+            $connection->rollback();
+            echo 'Error:', $e->getMessage(), PHP_EOL;
+            return 0;
+        }
+
+        return 1;
     }
 }

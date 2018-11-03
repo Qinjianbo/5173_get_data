@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\DB;
+use App\MyPdo;
 
 class Model
 {
@@ -14,9 +15,11 @@ class Model
     public function __construct($connectionType)
     {
         if ($connectionType == 'mysqli') {
-            $this->db = new DB();
-        } else ($connectionType == 'pdo') {
-            $this->db = new Pdo();
+            $this->db = (new DB());
+        } elseif ($connectionType == 'pdo') {
+            $this->db = (new MyPdo());
+        } else {
+            $this->db = null;
         }
     }
 
