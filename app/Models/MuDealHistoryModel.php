@@ -21,6 +21,8 @@ class MuDealHistoryModel extends BaseModel
      *
      * @return int
      */
+    // 知识点小记：设置自增之后，即使插入失败，id还是会自动增长
+    // 知识点链接：https://www.cnblogs.com/zdz8207/p/3511147.html
     public function insert(array $data) : int
     {
         $fields = array_keys($data);
