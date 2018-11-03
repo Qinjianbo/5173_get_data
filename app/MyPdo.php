@@ -27,8 +27,11 @@ class MyPdo
         $this->user = $config['user'];
         $this->pass = $config['pass'];
 
-        echo $this->getDsn(), PHP_EOL;
-        $this->connection = new \PDO($this->getDsn(), $this->user, $this->pass);
+        try {
+            $this->connection = new \PDO($this->getDsn(), $this->user, $this->pass);
+        } catch (\Exception $e) {
+            echo 'ConnectionError:', $e->getMessage(), PHP_EOL;
+        }
     }
 
     /**
