@@ -7,7 +7,7 @@ use App\Service\GetHistory;
 use App\Models\MuDealHistoryModel;
 
 // 发送请求
-echo 'start...', PHP_EOL;
+echo 'start:', date('Y-m-d H:i:s'), PHP_EOL;
 $page = 1;
 $allProducts = [];
 $url = 'http://trading.5173.com/list/viewlastestdeallist.aspx';
@@ -109,4 +109,4 @@ function writeToDatabase($allProducts, $failFile) {
 
     return $successCount;
 }
-echo 'end...', PHP_EOL;
+echo 'end:', date('Y-m-d H:i:s'), PHP_EOL;
