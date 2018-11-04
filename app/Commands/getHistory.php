@@ -6,6 +6,7 @@ require(dirname(dirname(dirname(__FILE__))).'/config/dbConfig.php');
 use App\Service\GetHistory;
 use App\Models\MuDealHistoryModel;
 
+ini_set('date.timezone','Asia/Shanghai');
 // 发送请求
 echo 'start:', date('Y-m-d H:i:s'), PHP_EOL;
 $page = 1;
